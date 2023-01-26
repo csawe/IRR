@@ -15,31 +15,22 @@
                     <h5>Other costs - <span class="small">{{ property_obj.other_cost }}</span></h5>
                     <h5>Notes - <span class="small">{{ property_obj.notes }}</span></h5>
                     <h5>
-                
                         <a href="{% url 'editproperty' property_obj.pk %}" class="btn btn-dark">Edit this Property</a>
-                
                     </h5>
-                    {#continuation thurs#}
                     <h5>
-                
                         <a href="" class="btn btn-dark">Delete this Property</a>
                         <a href="" class="btn btn-dark">See all properties</a>
-                
                     </h5>
                     <h5 class="text-center">See  property details</h5>
                     <ul>
-                
                       <li>  <a href="" class="btn btn-dark">Results</a></li>
                       <li> <a href="" class="btn btn-dark">Photograpgh</a></li>
                       <li> <a href="" class="btn btn-dark">Value</a></li>
                       <li> <a href="" class="btn btn-dark">Interest Bill</a></li>
                       <li><a href="" class="btn btn-dark">Cash Flow</a></li>
-
-                
                     </ul>
                     <br>
-
-                    {% for image in image %}
+                    {% for i in images %}
                     <p>
                         <a class="btn btn-dark btn-lg btn-block" data-toggle="collapse" href="#collapseExample"
                            role="button"
@@ -49,8 +40,7 @@
                     </p>
                     <div class="collapse" id="collapseExample">
                         <div class="card card-body">
-                            <img class="d-block w-100 property-img-page" src="{{image.image.url}}"
-                                 alt="Third slide">
+                            <img class="d-block w-100 property-img-page" src="{{i.image.url}}" alt="Third slide">
                         </div>
                     </div>
                     {% endfor %}
@@ -68,162 +58,192 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td></td>
-                            <td>IRR</td>
-                            <td>{{ property_obj.irr_year_one }}%</td>
-                            <td>{{ property_obj.irr_year_two }}%</td>
-                            <td>{{ property_obj.irr_year_three }}%</td>
-                        </tr>
-                        <tr>
                             <th scope="row"></th>
                             <td>Property Value</td>
-                            <td>R624,000.00</td>
-                            <td>R648,690.00</td>
-                            <td>R674,918.40</td>
+                            {% for value in property_obj.property_value_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th scope="row"></th>
                             <td>Loan Amount</td>
-                            <td>R4,922,303.49</td>
-                            <td>R4,836,044.56</td>
-                            <td>R4,740,279.59</td>
+                            {% for value in property_obj.loan_amount_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th scope="row"></th>
                             <td>Equity</td>
-                            <td>R-4,544,303.49</td>
-                            <td>R-4,427,804.56</td>
-                            <td>R-4,299,380.39</td>
+                            {% for value in property_obj.equity_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th scope="row"></th>
                             <td>Gross Rental Income</td>
-                            <td>R225,480.96</td>
-                            <td>R242,392.03</td>
-                            <td>R260,571.43</td>
+                            {% for value in property_obj.gross_rental_income_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th scope="row"></th>
-                            <td>Loan Principle</td>
-                            <td>R77,696.51</td>
-                            <td>R86,258.93</td>
-                            <td>R95,764.97</td>
+                            <td>Loan Principal</td>
+                            {% for value in property_obj.loan_principle_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th scope="row"></th>
                             <td>Loan Interest</td>
-                            <td>R624,000.00</td>
-                            <td>R648,690.00</td>
-                            <td>R674,918.40</td>
+                            {% for value in property_obj.loan_interest_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th scope="row"></th>
                             <td>Total Loan Payment</td>
-                            <td>R624,000.00</td>
-                            <td>R648,690.00</td>
-                            <td>R674,918.40</td>
-
+                            {% for value in property_obj.total_loan_payment_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th scope="row"></th>
-
                             <td>Additional Loan Payments</td>
-                            <td>R624,000.00</td>
-                            <td>R648,690.00</td>
-                            <td>R674,918.40</td>
-
+                            {% for value in property_obj.additional_loan_payment_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th scope="row"></th>
-
                             <td>Renovations (Own Pocket)</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
-
+                            {% for value in property_obj.renovations_own_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th scope="row"></th>
-
+                            <td>Renovations (Loan)</td>
+                            {% for value in property_obj.renovations_loan_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th scope="row"></th>
                             <td>Repairs & Maintenance</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
-
+                            {% for value in property_obj.repairs_and_maintenance_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th scope="row"></th>
-
                             <td>Special Expenses</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
-
+                            {% for value in property_obj.special_expenses_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                             <th scope="row"></th>
-
                             <td>Property Expenses</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
-
+                            {% for value in property_obj.property_expenses_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                         <tr>
                             <th scope="row"></th>
-
                             <td>Total Property Expenses</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
-
+                            {% for value in property_obj.total_property_expenses_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                         <tr>
                             <th scope="row"></th>
-
                             <td>Capital Received</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
-
+                            {% for value in property_obj.capital_received_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                         <tr>
                             <th scope="row"></th>
-
                             <td>Pre Tax Cashflow</td>
-                            <td>R-387,106.97</td>
-                            <td>R-371,212.90</td>
-                            <td>R-354,126.77</td>
-
+                            {% for value in property_obj.pre_tax_cashflow_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                         <tr>
                             <th scope="row"></th>
-
                             <td>Intitial Capital Outflow</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
-
+                            {% for value in property_obj.initial_capital_outflow_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                         <tr>
                             <th scope="row"></th>
                             <td>Pre Tax Cash On Cash</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
+                            {% for value in property_obj.pre_tax_cashoncash_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         <tr>
                         <tr>
                             <th scope="row"></th>
                             <td>Total Taxable Deductions</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
-                            <td>R00.00</td>
+                            {% for value in property_obj.total_taxable_deductions_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th scope="row"></th>
+                            <td>Depreciation</td>
+                            {% for value in property_obj.depreciation_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th scope="row"></th>
+                            <td>Taxable amount</td>
+                            {% for value in property_obj.taxable_amaount_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th scope="row"></th>
+                            <td>Tax Credit</td>
+                            {% for value in property_obj.tax_credit_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th scope="row"></th>
+                            <td>After Tax Cash Flow</td>
+                            {% for value in property_obj.after_tax_cashflow_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th scope="row"></th>
+                            <td>After Tax Cash on Cash</td>
+                            {% for value in property_obj.after_tax_cashoncash_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <th scope="row"></th>
+                            <td>Income Per month</td>
+                            {% for value in property_obj.income_per_month_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>IRR</td>
+                            {% for value in property_obj.irr_list|slice:":3" %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
                         </tr>
                         </tbody>
                     </table>

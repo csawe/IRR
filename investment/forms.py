@@ -8,31 +8,19 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = CustomUser
         fields = ("username", "email")
-
-
 class LogInForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
-
-# class LogInForm(forms.Form):
-#     email = forms.EmailField()
-#     password = forms.CharField(widget=forms.PasswordInput)
-
-
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
 
     class Meta:
         model = CustomUser
         fields = ['username', 'email']
-
-
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['prof_pic', 'f_name', 'l_name', 'phone', 'bio']
-
-
 class PropertyForm(forms.ModelForm):
     class Meta:
         model = Property
@@ -67,7 +55,8 @@ class PropertyForm(forms.ModelForm):
             'bond_value': widgets.Input(attrs={
                 'class': 'form-control',
                 'placeholder': '-----',
-                'id': 'bond_value'
+                'id': 'bond_value',
+                'readonly': 'readonly'
             }),
             'notes': widgets.Textarea(attrs={
                 'class': 'form-control',
@@ -75,75 +64,40 @@ class PropertyForm(forms.ModelForm):
                 'id': 'notes'
             }),
         }
+        def save(self, commit=True):
+            instance = super().save(commit=False)
+            purchase_price = self.cleaned_data['purchase_price']
+            deposit = self.cleaned_data['deposit']
+            instance.bond_value = purchase_price - deposit
+            if commit:
+                instance.save()
+            return instance
         ##pick up from here on wednesday
 class EditpropertyForm(forms.ModelForm):
      class Meta:
         model = Property
-        fields = ['name', 'property_type', 'purchase_price', 'deposit', 'City',
-                  'bond_value', 'notes']
-        
-##thrusday
+        fields = ['name', 'property_type', 'purchase_price', 'deposit', 'City', 'bond_value', 'notes']      
 class InterestRateForm(forms.ModelForm):
     class Meta:
         model = InterestRates
-        fields = ['type', 'rate', 'averageinterestrate','term']
-class InflationRateForm(forms.ModelForm):
-    class Meta:
-        model = InflationRates
-        fields = ['rate','averageinflationrate']
+        fields = ['averageinterestrate', 'type', 'term', 'rates']
 class DepreciationForm(forms.ModelForm):
     class Meta:
         model = Depreciation
-        fields = ['description','type','value','rate','years']
-class CapitalGrowthRatesForm(forms.ModelForm):
-    class Meta:
-        model =  CapitalGrowthRates
-        fields = ['averagecapitalGrowthrate','rate']
-class MonthlyExpenseForm(forms.ModelForm):
-    class Meta:
-        model =   MonthlyExpense
-        fields = ['description','value']
-class OwnRenovationsForm(forms.ModelForm):
-    class Meta:
-        model =   OwnRenovations
-        fields = ['incomeperyear','amount']
-class LoanRenovationsForm(forms.ModelForm):
-    class Meta:
-        model =   LoanRenovations
-        fields = ['incomeperyear','amount']
-class repairs_maintenanceForm(forms.ModelForm):
-    class Meta:
-        model =   repairs_maintenance
-        fields = ['amount']
-
-class specialexpensesForm(forms.ModelForm):
-    class Meta:
-        model =  specialexpenses
-        fields = ['amount']
-        
+        fields = ['description','type','value','rate','years']    
 class taxoptionsForm(forms.ModelForm):
     class Meta:
-        model =  taxoptions
-        fields = ['taxationcapacity','method ','taxrate','annualtaxableincome','maximumtaxrate ','income','rate']
-        
+        model =  TaxOptions
+        fields = ['taxationcapacity','method','taxrate','annualtaxableincome','rate', 'maximumtaxrate','income_rate']   
 class managementexpensesForm(forms.ModelForm):
     class Meta:
-        model =  managementexpenses
-        fields = ['vacancyrate','managementfee','managementfeeperyear']        
-class AdditionalloanpaymentsForm(forms.ModelForm):
-    class Meta:
-        model =  Additionalloanpayments
-        fields = ['amount']
-class CapitalincomeForm(forms.ModelForm):
-    class Meta:
-        model =  Capitalincome
-        fields = ['amount']        
-
+        model =  ManagementExpenses
+        fields = ['vacancyrate','managementfee','managementfeeperyear']               
 class RentalIncomeForm(forms.ModelForm):
     class Meta:
         model =  RentalIncome
-        fields = ['rentalincreasetype','increasepercentage','averagerentalincomepermonth','amount','']        
+        fields = ['rentalincreasetype','increasepercentage','averagerentalincomepermonth','amount']        
 class comparisonForm(forms.ModelForm):
     class Meta:
-        model =  comparison
+        model =  Comparison
         fields = ['description','rate']        

@@ -18,7 +18,7 @@
         <tbody>
         {% for property in all_property %}
         <tr>
-            <th scope="row">{{ property.name }}</th>
+            <th scope="row"><a href="{% url 'propertyitem' property.id %}" class="btn btn-dark">{{ property.name }}</a></th>
             <td>{{ property.City }}, <span>{{ property.City.country}}</span></td>
             <td>{{ property.purchase_date }}</td>
             <td>{{ property.purchase_price }}</td>
@@ -27,10 +27,6 @@
             <td>{{ property.irr_year_one }}%</td>
             <td>{{ property.irr_year_two }}%</td>
             <td>{{ property.irr_year_three }}%</td>
-            <td>
-                
-                <a href="{% url 'propertyitem' property.id %}" class="btn btn-dark">View</a>
-            </td>
         </tr>
         {% endfor %}
 
