@@ -74,15 +74,15 @@ class Property(models.Model):
     bond_value = models.IntegerField(null=True)
     purchase_date = models.DateField(auto_now_add=True, null=True)
     notes = models.TextField(max_length=1260, null=True)
-    InflationRates = ArrayField(models.IntegerField(), null=True)
-    CapitalGrowthRates = ArrayField(models.IntegerField(default=0), null=True)
-    MonthlyExpenses = models.JSONField(null=True)
-    OwnRenivations = models.JSONField(null=True)
-    LoanRenivations = models.JSONField(null=True)
-    RepairsAndMaintainance = ArrayField(models.IntegerField(), null=True)
-    Specialexpenses = ArrayField(models.IntegerField(), null=True)
-    AdditionalLoanPayments = ArrayField(models.IntegerField(), null=True)
-    Capitalincome = ArrayField(models.IntegerField(), null=True)     
+    InflationRates = ArrayField(models.IntegerField(), null=True, default=list(0 for i in range(30)))
+    CapitalGrowthRates = ArrayField(models.IntegerField(), null=True, default=list(0 for i in range(30)))
+    MonthlyExpenses = ArrayField(models.JSONField(), null=True)
+    OwnRenivations =  ArrayField(models.JSONField(), null=True)
+    LoanRenivations = models.JSONField(null=True, default=({"first": "Null"}))
+    RepairsAndMaintainance = ArrayField(models.IntegerField(), null=True, default=list(0 for i in range(2)))
+    Specialexpenses = ArrayField(models.IntegerField(), null=True,default=list(0 for i in range(2)))
+    AdditionalLoanPayments = ArrayField(models.IntegerField(), null=True, default=list(0 for i in range(2)))
+    Capitalincome = ArrayField(models.IntegerField(), null=True, default=list(0 for i in range(2)))     
     # Begin of array fields
     property_value_list = ArrayField(models.IntegerField(), default=list)
     def assign_property_value(self):
@@ -266,7 +266,29 @@ class Property(models.Model):
     def assign_irr(self):
         pass
     
+    def assign_inflation_rates(self):
+        pass
+    
     #Assign interest Rates
+    def assign_monthlyexpenses(self):
+        description =  ['Water', 'Insurance', 'Maintenance', 'Bank charges', 'Other']
+        for i in description:
+            key = {"Description":i, "Value":0}
+            self.MonthlyExpenses.append(key)
+        self.save()
+    def assign_ownrenovations(self):
+        for i in range(30):
+            key = {"Amount":0, "Income per year":0}
+            self.OwnRenivations.append(key)
+        self.save()
+    def assign_loanrenovations(self):
+        for i in range(30):
+            key = {"Amount":0, "Income per year":0}
+            self.LoanRenivations.append(key)
+        self.save()
+    def assign_tax_options(self):
+        tax_option = TaxOptions(taxationcapacity='Personal', method='0%', taxrate=0, annualtaxableincome=0, rate=0, maximumtaxrate=0, income_rate = {"income":"1000"}, property=Property.objects.get(id=self.id))
+        tax_option.save()
     def assign_interest_rates(self):
         rates = [9]*30
         interest_rate = InterestRates(type="Interest & capital", term=30, rates=rates, property=Property.objects.get(id=self.id))
@@ -279,6 +301,9 @@ class Property(models.Model):
     def assign_depreciation(self):
         depreciation = Depreciation(type="Straight", value=2, rate=2, years=30, property=Property.objects.get(id=self.id))
         depreciation.save()
+    def assign_comparison(self):
+        comparison = Comparison(property=Property.objects.get(id=self.id))
+        comparison.save()
         
     def __str__(self):
         return self.name
@@ -365,4 +390,4 @@ class Comparison(models.Model):
     rate = models.IntegerField(('Rate (%)'),null=True,default=0)
     property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True)
     def __str__(self):
-        return self.description    
+        return str(self.description)
