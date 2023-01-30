@@ -132,12 +132,12 @@ Model6Formset = formset_factory(MonthlyExpensesForm, extra=1) # Monthly Expenses
 class OwnRenovationsForm(forms.ModelForm):
     class Meta:
         model = Property
-        fields = ['OwnRenivations']
+        fields = ['OwnRenovations']
 Model7Formset = formset_factory(OwnRenovationsForm, extra=1) # Renovations(Own)
 class LoanRenovationsForm(forms.ModelForm):
     class Meta:
         model = Property
-        fields = ['LoanRenivations']
+        fields = ['LoanRenovations']
 Model8Formset = formset_factory(LoanRenovationsForm, extra=1) # Renovations(Loan)
 class RepairsForm(forms.ModelForm):
     class Meta:

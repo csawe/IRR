@@ -74,15 +74,15 @@ class Property(models.Model):
     bond_value = models.IntegerField(null=True)
     purchase_date = models.DateField(auto_now_add=True, null=True)
     notes = models.TextField(max_length=1260, null=True)
-    InflationRates = ArrayField(models.IntegerField(), null=True, default=list(0 for i in range(30)))
-    CapitalGrowthRates = ArrayField(models.IntegerField(), null=True, default=list(0 for i in range(30)))
-    MonthlyExpenses = ArrayField(models.JSONField(), null=True)
-    OwnRenivations =  ArrayField(models.JSONField(), null=True)
-    LoanRenivations = models.JSONField(null=True, default=({"first": "Null"}))
-    RepairsAndMaintainance = ArrayField(models.IntegerField(), null=True, default=list(0 for i in range(2)))
-    Specialexpenses = ArrayField(models.IntegerField(), null=True,default=list(0 for i in range(2)))
-    AdditionalLoanPayments = ArrayField(models.IntegerField(), null=True, default=list(0 for i in range(2)))
-    Capitalincome = ArrayField(models.IntegerField(), null=True, default=list(0 for i in range(2)))     
+    InflationRates = ArrayField(models.IntegerField(), null=True, default=list)
+    CapitalGrowthRates = ArrayField(models.IntegerField(), null=True, default=list)
+    MonthlyExpenses = ArrayField(models.JSONField(), null=True, default=list)
+    OwnRenovations =  ArrayField(models.JSONField(), null=True, default=list)
+    LoanRenovations = ArrayField(models.JSONField(), null=True, default=list)
+    RepairsAndMaintainance = ArrayField(models.IntegerField(), null=True, default=list)
+    Specialexpenses = ArrayField(models.IntegerField(), null=True, default=list)
+    AdditionalLoanPayments = ArrayField(models.IntegerField(), null=True, default=list)
+    Capitalincome = ArrayField(models.IntegerField(), null=True, default=list)     
     # Begin of array fields
     property_value_list = ArrayField(models.IntegerField(), default=list)
     def assign_property_value(self):
@@ -95,9 +95,8 @@ class Property(models.Model):
     loan_amount_list = ArrayField(models.IntegerField(), default=list) 
     def assign_outstanding_loan(self):
         interest_rate = sum(InterestRates.objects.get(property=Property.objects.get(id=self.id)).rates)/len(InterestRates.objects.get(property=Property.objects.get(id=self.id)).rates)
-        term = InterestRates.objects.get(property=Property.objects.get(id=self.id)).term
-        for year in range(1,term+1):
-            outstanding_loan = int(self.bond_value * (1 - interest_rate/100)**year)
+        for year in range(30):
+            outstanding_loan = int(self.bond_value * (1 - interest_rate/100)**(year+1))
             self.loan_amount_list.append(outstanding_loan)
         self.save()
     equity_list = ArrayField(models.IntegerField(), default=list)
@@ -110,9 +109,10 @@ class Property(models.Model):
     def assign_gross_rental_income(self):
         management_expenses = ManagementExpenses.objects.get(property=Property.objects.get(id=self.id))
         rent = RentalIncome(increasepercentage=2, averagerentalincomepermonth=1800, property=Property.objects.get(id=self.id))
-        for i in range(30):
+        for _ in range(30):
             income = (rent.averagerentalincomepermonth*12) - management_expenses.managementfeeperyear
-            rent.amount.append(income)
+            self.gross_rental_income_list.append(income)
+            self.save()
         rent.save()
     loan_interest_list = ArrayField(models.IntegerField(), default=list)
     def assign_loan_interest(self):       
@@ -181,19 +181,20 @@ class Property(models.Model):
         self.save()
     capital_received_list = ArrayField(models.IntegerField(), default=list)
     def assign_capital_list(self):
-        pass
+        for _ in range(30):
+            self.capital_received_list.append(0)
+        self.save()
     pre_tax_cashflow_list = ArrayField(models.IntegerField(), default=list)
     def assign_pre_tax_cashflow(self):
-        gross_rental_income = RentalIncome.objects.get(property=Property.objects.get(id=self.id)).amount
         for i in range(30):
-            cash_flow = gross_rental_income[i] - self.total_property_expenses_list[i]
+            cash_flow = (self.gross_rental_income_list[i]+self.capital_received_list[i]) - (self.total_property_expenses_list[i]+self.total_loan_payment_list[i])
             self.pre_tax_cashflow_list.append(cash_flow)
         self.save()
     initial_capital_outflow_list = ArrayField(models.IntegerField(), default=list)
     def assign_initial_capital_outflow(self):
         deposit = self.deposit
         other_costs = 0 # Assign other costs
-        for i in range(30):
+        for _ in range(30):
             outflow = deposit + other_costs
             self.initial_capital_outflow_list.append(outflow)
         self.save()
@@ -210,7 +211,7 @@ class Property(models.Model):
             self.total_taxable_deductions_list.append(deductions)
         self.save()
     depreciation_list = ArrayField(models.IntegerField(), default=list)
-    def assign_depreciation(self, depreciation_type='straight'):
+    def assign_depreciation_list(self, depreciation_type='straight'):
         if depreciation_type == 'straight':
             rate = (Depreciation.objects.get(property=Property.objects.get(id=self.id)).rate)/100
             years = Depreciation.objects.get(property=Property.objects.get(id=self.id)).years
@@ -219,10 +220,11 @@ class Property(models.Model):
             annual_depreciation = purchase_price * rate
             total_depreciation = annual_depreciation * years
             remaining_value = purchase_price - total_depreciation
-            for year in range(1, years+1):
-                current_date = purchase_date + timedelta(days=365*year)
-                current_depreciation = annual_depreciation*year
-                self.depreciation_list.append(annual_depreciation) # Fix formula
+            for i in range(30):
+                # current_date = purchase_date + timedelta(days=365*(year+1))
+                current_depreciation = annual_depreciation*(i+1)
+                self.depreciation_list.append(current_depreciation) # Fix formula
+            self.save()
         elif depreciation_type == 'Diminishing':
             rate = (Depreciation.objects.get(property=Property.objects.get(id=self.id)).rate)/100
             years = Depreciation.objects.get(property=Property.objects.get(id=self.id)).years
@@ -231,11 +233,12 @@ class Property(models.Model):
             for i in range(30):
                 annual_depreciation = purchase_price*(rate*(years-i))/years
                 self.depreciation_list.append(annual_depreciation)
+            self.save()
+            
     taxable_amaount_list = ArrayField(models.IntegerField(), default=list)
     def assign_taxable_amount(self):
-        gross_rental_income = RentalIncome.objects.get(property=Property.objects.get(id=self.id)).amount
         for i in range(30):
-            amount = gross_rental_income[i] - self.total_taxable_deductions_list[i]
+            amount = self.gross_rental_income_list[i] - (self.total_taxable_deductions_list[i] + self.depreciation_list[i] )
             self.taxable_amaount_list.append(amount)
         self.save()
     tax_credit_list = ArrayField(models.IntegerField(), default=list)
@@ -247,7 +250,7 @@ class Property(models.Model):
     after_tax_cashflow_list = ArrayField(models.IntegerField(), default=list)
     def assign_after_tax_cashflow(self):
         for i in range(30):
-            cashflow = self.pre_tax_cashflow_list[i] - self.tax_credit_list[i]
+            cashflow = self.pre_tax_cashflow_list[i] + self.tax_credit_list[i]
             self.after_tax_cashflow_list.append(cashflow)
         self.save()
     after_tax_cashoncash_list = ArrayField(models.IntegerField(), default=list)
@@ -259,15 +262,14 @@ class Property(models.Model):
     income_per_month_list = ArrayField(models.IntegerField(), default=list)
     def assign_income(self):
         for i in range(30):
-            income = self.after_tax_cashoncash_list[i]/12
+            income = self.after_tax_cashflow_list[i]/12
             self.income_per_month_list.append(income)
         self.save()
     irr_list = ArrayField(models.IntegerField(), default=list)
     def assign_irr(self):
         pass
-    
-    def assign_inflation_rates(self):
-        pass
+    # def assign_inflation_rates(self):
+    #     pass
     
     #Assign interest Rates
     def assign_monthlyexpenses(self):
@@ -279,20 +281,44 @@ class Property(models.Model):
     def assign_ownrenovations(self):
         for i in range(30):
             key = {"Amount":0, "Income per year":0}
-            self.OwnRenivations.append(key)
+            self.OwnRenovations.append(key)
         self.save()
     def assign_loanrenovations(self):
         for i in range(30):
             key = {"Amount":0, "Income per year":0}
-            self.LoanRenivations.append(key)
+            self.LoanRenovations.append(key)
         self.save()
     def assign_tax_options(self):
         tax_option = TaxOptions(taxationcapacity='Personal', method='0%', taxrate=0, annualtaxableincome=0, rate=0, maximumtaxrate=0, income_rate = {"income":"1000"}, property=Property.objects.get(id=self.id))
         tax_option.save()
     def assign_interest_rates(self):
         rates = [9]*30
-        interest_rate = InterestRates(type="Interest & capital", term=30, rates=rates, property=Property.objects.get(id=self.id))
+        interest_rate = InterestRates(type="Interest & capital", term=20, rates=rates, property=Property.objects.get(id=self.id))
         interest_rate.save()
+    def assign_inflationrates(self):
+        for _ in range(30):
+            self.InflationRates.append(0)
+        self.save()
+    def assign_capitalgrowthrates(self):
+        for _ in range(30):
+            self.CapitalGrowthRates.append(0)
+        self.save()
+    def assign_repairsandmaintenance(self):
+        for _ in range(30):
+            self.RepairsAndMaintainance.append(0)
+        self.save()
+    def assign_specialexpenses(self):
+        for _ in range(30):
+            self.Specialexpenses.append(0)
+        self.save()
+    def assign_additionalloanpayments(self):
+        for _ in range(30):
+            self.AdditionalLoanPayments.append(0)
+        self.save()
+    def assign_capitalincome(self):
+        for _ in range(30):
+            self.Capitalincome.append(0)
+        self.save()
     #Assign management expenses
     def assign_management_expenses(self):
         management_expenses = ManagementExpenses(vacancyrate=8, managementfee=8, managementfeeperyear=1728, property=Property.objects.get(id=self.id))

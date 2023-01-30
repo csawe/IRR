@@ -72,6 +72,14 @@ def add_property(request):
             temp.assign_comparison()
             temp.assign_ownrenovations()
             temp.assign_loanrenovations()
+            
+            temp.assign_inflationrates()
+            temp.assign_capitalgrowthrates()
+            temp.assign_repairsandmaintenance()
+            temp.assign_specialexpenses()
+            temp.assign_additionalloanpayments()
+            temp.assign_capitalincome()
+            
             # Fill table
             temp.assign_property_value()
             temp.assign_outstanding_loan()
@@ -92,6 +100,7 @@ def add_property(request):
             temp.assign_initial_capital_outflow()
             temp.assign_pre_tax_cashoncash()
             temp.assign_taxable_deductions()
+            temp.assign_depreciation_list()
             temp.assign_taxable_amount()
             temp.assign_tax_credits()
             temp.assign_after_tax_cashflow()
@@ -118,8 +127,7 @@ def edit_property(request, pk):
     capitalgrowthrates_rates = property_instance.CapitalGrowthRates
     # monthlyexpense_instance = get_object_or_404(Property, pk=pk)
     # ownrenovations_instance = get_object_or_4-4(Property, pk=pk)
-    ownrenovations_list = property_instance.OwnRenivations
-    print(ownrenovations_list)
+    ownrenovations_list = property_instance.OwnRenovations
     # loanrenovations_instance = get_object_or_4-4(Property, pk=pk)
     # repairsandmaintenance_instace = get_object_or_404(Property, pk=pk)
     repairs_list = property_instance.RepairsAndMaintainance
