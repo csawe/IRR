@@ -293,7 +293,7 @@ class Property(models.Model):
         tax_option.save()
     def assign_interest_rates(self):
         rates = [9]*30
-        interest_rate = InterestRates(type="Interest & capital", term=20, rates=rates, property=Property.objects.get(id=self.id))
+        interest_rate = InterestRates(interest_type ="Interest & capital", term=20, rates=rates, property=Property.objects.get(id=self.id))
         interest_rate.save()
     def assign_inflationrates(self):
         for _ in range(30):
@@ -325,7 +325,7 @@ class Property(models.Model):
         management_expenses.save()
     #depreciation
     def assign_depreciation(self):
-        depreciation = Depreciation(type="Straight", value=2, rate=2, years=30, property=Property.objects.get(id=self.id))
+        depreciation = Depreciation(depreciation_type="Straight", value=2, rate=2, years=30, property=Property.objects.get(id=self.id))
         depreciation.save()
     def assign_comparison(self):
         comparison = Comparison(property=Property.objects.get(id=self.id))
@@ -349,7 +349,7 @@ class Images(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True)
 class InterestRates(models.Model):
     averageinterestrate = models.FloatField(('Average Interest Rate (%)'),null=True,default=10)
-    type = models.CharField(null=True,max_length=50,default='Interest & capital', choices=(
+    interest_type = models.CharField(null=True,max_length=50,default='Interest & capital', choices=(
         ('Interest & capital', 'Interest & capital'),
         ('Interest Only', 'Interest Only'), 
     ))
@@ -360,13 +360,13 @@ class InterestRates(models.Model):
     def __str__(self):
         return str(self.term)
 class Depreciation(models.Model):
-    description = models.CharField(null=True,max_length=255)
-    type = models.CharField(null=True,max_length=50,default='Straight', choices=(
+    description = models.CharField(null=True,max_length=255, blank=True)
+    depreciation_type = models.CharField(null=True, max_length=50, default='Straight', choices=(
         ('Straight', 'Straight'),
         ('Diminishing', 'Diminishing'),
     ))
     value = models.FloatField(null=True)
-    rate = models.IntegerField(('Rate (%)'),null=True,default=8)
+    rate = models.IntegerField(('Rate (%)'),null=True,default=8, blank=True)
     years = models.IntegerField(null=True)
     property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True)
     def __str__(self):

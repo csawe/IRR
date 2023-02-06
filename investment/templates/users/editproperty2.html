@@ -1,0 +1,165 @@
+{% extends "base.html" %} {% block content %}
+<div class="container-fluid property-list">
+    <input type="button" value="Interest Rate Options" onclick="showModel2Forms()" class="btn btn-primary m-3">
+    <input type="button" value="Inlfation Rate Options" onclick="showModel3Forms()" class="btn btn-primary m-3">
+    <input type="button" value="Depreciation Options" onclick="showModel4Forms()" class="btn btn-primary m-3">
+    <input type="button" value="Capital Growth Rate Options" onclick="showModel5Forms()" class="btn btn-primary m-3">
+    <input type="button" value="Monthly Expenses Options" onclick="showModel6Forms()" class="btn btn-primary m-3">
+    <input type="button" value="Own Renovations Options" onclick="showModel7Forms()" class="btn btn-primary m-3">
+    <input type="button" value="Loan Renovations Options" onclick="showModel8Forms()" class="btn btn-primary m-3">
+    <div class="row">
+        <div class="col-6">
+            <form method="post" class="m-1">
+                {% csrf_token %}
+                <div id="model2-forms">
+                    <h2>Model 2 Forms -- Interest rate options</h2>
+                    <div style="display:none;">Property: {{ interestrate_forms.property }}</div>
+                    Average Interest: {{ interestrate_forms.averageinterestrate}}
+                    <br>
+                    Type: {{ interestrate_forms.interest_type }}
+                    <br>
+                    Term: {{ interestrate_forms.term }}
+                    <br>
+                    Rates:
+                    <br> 
+                    {{ interestrate_rateforms.management_form }}
+                    {% for form1 in interestrate_rateforms %}
+                        Year {{ forloop.counter }}: {{ form1.interestrate }}
+                        <br>
+                    {% endfor %}
+                </div>
+                <div id="model3-forms" style="display:none;">
+                    <h2>Model 3 Forms -- Inlfation rate options</h2>
+                    {{ inflationrate_rateforms.management_form }}
+                    {% for form in inflationrate_rateforms %}
+                        Year {{ forloop.counter }}: {{ form.inflationrate }}
+                        <br>
+                    {% endfor %}
+                </div>
+                <div id="model4-forms" style="display:none;">
+                    <h2>Model 4 -- Depreciation </h2>
+                    <div style="display:none;">Property: {{ depreciation_forms.property }}</div>
+                    Description: {{ depreciation_forms.description }} <br>
+                    Type: {{ depreciation_forms.depreciation_type }} <br>
+                    Value: {{ depreciation_forms.value }} <br>
+                    Rate: {{ depreciation_forms.rate }} <br>
+                    Year: {{ depreciation_forms.years }} <br>
+                </div>
+                <div id="model5-forms" style="display:none;">
+                    <h2>Model 5 Forms -- Capital Growth Rate options</h2>
+                    {{ capitalgrowthrate_rateforms.management_form }}
+                    {% for form in capitalgrowthrate_rateforms %}
+                        Year {{ forloop.counter }}: {{ form.capitalgrowthrate }}
+                        <br>
+                    {% endfor %}
+                </div>
+                <div id="model6-forms" style="display:none;">
+                    <h2>Model 6 Forms -- Monthly Expenses</h2>
+                    {{ monthlyexpenses_forms.management_form }}
+                    Description - Amount <br>
+                    {% for form in monthlyexpenses_forms %}
+                        {{ form.monthly_expense_description }} : {{ form.value }}
+                        <br>
+                    {% endfor %}
+                </div>
+                <div id="model7-forms" style="display:none;">
+                    <h2>Model 7 Forms -- Own Renovations</h2>
+                    {{ ownrenovations_forms.management_form }}
+                    Year - Amount - Income per year<br>
+                    {% for form in ownrenovations_forms %}
+                    {{ forloop.counter }}: {{ form.own_renovations_amount }} {{ form.own_renovations_income }}
+                        <br>
+                    {% endfor %}
+                </div>
+                <div id="model8-forms" style="display:none;">
+                    <h2>Model 8 Forms -- Loan Renovations</h2>
+                    {{ ownrenovations_forms.management_form }}
+                    Year - Amount - Income per year<br>
+                    {% for form in loanrenovations_forms %}
+                    {{ forloop.counter }}: {{ form.loan_renovations_amount }} {{ form.loan_renovations_income }}
+                        <br>
+                    {% endfor %}
+                </div>
+
+                
+                {% if form.errors %}
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <input type="submit" value="Save" class="btn btn-primary m-3">
+              </form>
+
+        </div>
+    </div>
+</div>
+<script>
+    function showModel2Forms() {
+        document.getElementById("model2-forms").style.display = "block";
+        document.getElementById("model3-forms").style.display = "none";
+        document.getElementById("model4-forms").style.display = "none";
+        document.getElementById("model5-forms").style.display = "none";
+        document.getElementById("model6-forms").style.display = "none";
+        document.getElementById("model7-forms").style.display = "none";
+        document.getElementById("model8-forms").style.display = "none";
+    }
+    function showModel3Forms(){
+        document.getElementById("model2-forms").style.display = "none";
+        document.getElementById("model3-forms").style.display = "block";
+        document.getElementById("model4-forms").style.display = "none";
+        document.getElementById("model5-forms").style.display = "none";
+        document.getElementById("model6-forms").style.display = "none";
+        document.getElementById("model7-forms").style.display = "none";
+        document.getElementById("model8-forms").style.display = "none";
+    }
+    function showModel4Forms(){
+        document.getElementById("model2-forms").style.display = "none";
+        document.getElementById("model3-forms").style.display = "none";
+        document.getElementById("model4-forms").style.display = "block";
+        document.getElementById("model5-forms").style.display = "none";
+        document.getElementById("model6-forms").style.display = "none";
+        document.getElementById("model7-forms").style.display = "none";
+        document.getElementById("model8-forms").style.display = "none";
+    }
+    function showModel5Forms(){
+        document.getElementById("model2-forms").style.display = "none";
+        document.getElementById("model3-forms").style.display = "none";
+        document.getElementById("model4-forms").style.display = "none";
+        document.getElementById("model5-forms").style.display = "block";
+        document.getElementById("model6-forms").style.display = "none";
+        document.getElementById("model7-forms").style.display = "none";
+        document.getElementById("model8-forms").style.display = "none";
+    }
+    function showModel6Forms(){
+        document.getElementById("model2-forms").style.display = "none";
+        document.getElementById("model3-forms").style.display = "none";
+        document.getElementById("model4-forms").style.display = "none";
+        document.getElementById("model5-forms").style.display = "none";
+        document.getElementById("model6-forms").style.display = "block";
+        document.getElementById("model7-forms").style.display = "none";
+        document.getElementById("model8-forms").style.display = "none";
+    }
+    function showModel7Forms(){
+        document.getElementById("model2-forms").style.display = "none";
+        document.getElementById("model3-forms").style.display = "none";
+        document.getElementById("model4-forms").style.display = "none";
+        document.getElementById("model5-forms").style.display = "none";
+        document.getElementById("model6-forms").style.display = "none";
+        document.getElementById("model7-forms").style.display = "block";
+        document.getElementById("model8-forms").style.display = "none";
+    }
+    function showModel8Forms(){
+        document.getElementById("model2-forms").style.display = "none";
+        document.getElementById("model3-forms").style.display = "none";
+        document.getElementById("model4-forms").style.display = "none";
+        document.getElementById("model5-forms").style.display = "none";
+        document.getElementById("model6-forms").style.display = "none";
+        document.getElementById("model7-forms").style.display = "none";
+        document.getElementById("model8-forms").style.display = "block";
+    }
+</script>
+{% endblock %}

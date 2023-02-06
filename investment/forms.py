@@ -80,11 +80,11 @@ class EditpropertyForm(forms.ModelForm):
 class InterestRateForm(forms.ModelForm):
     class Meta:
         model = InterestRates
-        fields = ['averageinterestrate', 'type', 'term', 'rates']
+        fields = ['property','averageinterestrate', 'interest_type', 'term']
 class DepreciationForm(forms.ModelForm):
     class Meta:
         model = Depreciation
-        fields = ['description','type','value','rate','years']    
+        fields = ['property','description','depreciation_type','value','rate','years']    
 class TaxOptionsForm(forms.ModelForm):
     class Meta:
         model =  TaxOptions
@@ -103,42 +103,28 @@ class ComparisonForm(forms.ModelForm):
         model =  Comparison
         fields = ['description','rate']        
 
-class RateForm(forms.Form):
-    rate = forms.IntegerField()
-RateFormSet = forms.formset_factory(RateForm, extra=0)
+class InterestRateFormRate(forms.Form):
+    interestrate = forms.IntegerField()
+InterestRateFormSet = forms.formset_factory(InterestRateFormRate, extra=0)# Interest Rate Options -- Rate form
+class InflationRateFormRate(forms.Form):
+    inflationrate = forms.IntegerField()
+InflationRatesFormSet = forms.formset_factory(InflationRateFormRate, extra=0)# Inflation Rates -- Rate form
+class CapitalGrowthRatesFormRate(forms.Form):
+    capitalgrowthrate = forms.IntegerField()
+CapitalGrowthRatesFormSet = forms.formset_factory(CapitalGrowthRatesFormRate, extra=0) # Capital Growth Rate
+class MonthlyExpensesFormJson(forms.Form):
+    monthly_expense_description = forms.CharField()
+    value = forms.CharField()
+MonthlyExpenseFormSet = forms.formset_factory(MonthlyExpensesFormJson, extra=0) # Monthly Expenses
+class OwnRenovationsFormJson(forms.Form):
+    own_renovations_amount = forms.IntegerField()
+    own_renovations_income = forms.IntegerField()
+OwnRenovationsFormSet = forms.formset_factory(OwnRenovationsFormJson, extra=0) # Own renovations
+class LoanRenovationsFormJson(forms.Form):
+    loan_renovations_amount = forms.IntegerField()
+    loan_renovations_income = forms.IntegerField()
+LoanRenovationsFormSet = forms.formset_factory(LoanRenovationsFormJson, extra=0) # Loan renovations
 
-class JsonForm(forms.Form):
-    data = forms.JSONField()
-JsonFormSet = forms.formset_factory(JsonForm, extra=0)
-
-#Model1Formset = formset_factory(EditpropertyForm, extra=1) # Photograph
-Model2Formset = formset_factory(InterestRateForm, extra=1) # Interest Rate Options -- Interest form
-class InflationRatesForm(forms.ModelForm):
-    class Meta:
-        model = Property
-        fields = ['InflationRates']
-Model3Formset = formset_factory(InflationRatesForm, extra=1) # Inflation Rates
-Model4Formset = formset_factory(DepreciationForm, extra=1) # Depreciation
-class CapitalGrowthRatesForm(forms.ModelForm):
-    class Meta:
-        model = Property
-        fields = ['CapitalGrowthRates']
-Model5Formset = formset_factory(CapitalGrowthRatesForm, extra=1) # Capital Growth Rates
-class MonthlyExpensesForm(forms.ModelForm):
-    class Meta:
-        model = Property
-        fields = ['MonthlyExpenses']
-Model6Formset = formset_factory(MonthlyExpensesForm, extra=1) # Monthly Expenses
-class OwnRenovationsForm(forms.ModelForm):
-    class Meta:
-        model = Property
-        fields = ['OwnRenovations']
-Model7Formset = formset_factory(OwnRenovationsForm, extra=1) # Renovations(Own)
-class LoanRenovationsForm(forms.ModelForm):
-    class Meta:
-        model = Property
-        fields = ['LoanRenovations']
-Model8Formset = formset_factory(LoanRenovationsForm, extra=1) # Renovations(Loan)
 class RepairsForm(forms.ModelForm):
     class Meta:
         model = Property
