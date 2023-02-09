@@ -88,16 +88,15 @@ class DepreciationForm(forms.ModelForm):
 class TaxOptionsForm(forms.ModelForm):
     class Meta:
         model =  TaxOptions
-        fields = ['taxationcapacity','method','taxrate','annualtaxableincome','rate', 'maximumtaxrate','income_rate']   
+        fields = ['property','taxationcapacity','method','taxrate','maximumtaxrate']   
 class ManagementExpensesForm(forms.ModelForm):
     class Meta:
         model =  ManagementExpenses
-        fields = ['vacancyrate','managementfee','managementfeeperyear']               
+        fields = ['vacancyrate','managementfee','managementfeeperyear', 'property']               
 class RentalIncomeForm(forms.ModelForm):
     class Meta:
         model =  RentalIncome
-        fields = ['rentalincreasetype','increasepercentage','averagerentalincomepermonth','amount']        
-        
+        fields = ['rentalincreasetype','increasepercentage','averagerentalincomepermonth','amount']              
 class ComparisonForm(forms.ModelForm):
     class Meta:
         model =  Comparison
@@ -124,24 +123,20 @@ class LoanRenovationsFormJson(forms.Form):
     loan_renovations_amount = forms.IntegerField()
     loan_renovations_income = forms.IntegerField()
 LoanRenovationsFormSet = forms.formset_factory(LoanRenovationsFormJson, extra=0) # Loan renovations
+class RepairsAndMaintenanceForm(forms.Form):
+    repairsandmaintenance = forms.IntegerField()
+RepairsAndMaintenanceFormSet = forms.formset_factory(RepairsAndMaintenanceForm, extra=0) # Repairs and Maintenance# Repairs & Maintenance
+class SpecialExpensesForm(forms.Form):
+    special_expense = forms.IntegerField()
+SpecialExpensesFormSet = forms.formset_factory(SpecialExpensesForm, extra=0) # Special Expenses
+class TaxOptionsFormJson(forms.Form):
+    tax_options_income_rate = forms.IntegerField()
+    tax_options_rate = forms.IntegerField()
+TaxOptionFormSet = forms.formset_factory(TaxOptionsFormJson, extra=0)
+class AdditionalLoanPaymentsForm(forms.Form):
+    additonalloanpayment  = forms.IntegerField()
+AdditionalLoanPaymentFormSet = forms.formset_factory(AdditionalLoanPaymentsForm, extra=0) # Additional Loan Payments 
 
-class RepairsForm(forms.ModelForm):
-    class Meta:
-        model = Property
-        fields = ['RepairsAndMaintainance']
-Model9Formset = formset_factory(RepairsForm, extra=1) # Repairs & Maintenance
-class SpecialExpensesForm(forms.ModelForm):
-    class Meta:
-        model = Property
-        fields = ['Specialexpenses']
-Model10Formset = formset_factory(SpecialExpensesForm, extra=1) # Special Expenses
-Model11Formset = formset_factory(TaxOptionsForm, extra=1) # Tax Options
-Model12Formset = formset_factory(ManagementExpensesForm, extra=1) # Management Expenses
-class AdditionalLoanPaymentsForm(forms.ModelForm):
-    class Meta:
-        model = Property
-        fields = ['AdditionalLoanPayments']
-Model13Formset = formset_factory(AdditionalLoanPaymentsForm, extra=1) # Additional Loan Payments 
 class CapitalIncomeForm(forms.ModelForm):
     class Meta:
         model = Property

@@ -289,8 +289,12 @@ class Property(models.Model):
             self.LoanRenovations.append(key)
         self.save()
     def assign_tax_options(self):
-        tax_option = TaxOptions(taxationcapacity='Personal', method='0%', taxrate=0, annualtaxableincome=0, rate=0, maximumtaxrate=0, income_rate = {"income":"1000"}, property=Property.objects.get(id=self.id))
-        tax_option.save()
+        income_rate = []
+        for _  in range(2):
+            income_rate.append({"income": 1000, "rate": 100})
+        taxoptions = TaxOptions(taxationcapacity="Personal" ,method="0%", taxrate=0,  maximumtaxrate=0, income_rate=income_rate,  property=Property.objects.get(id=self.id))
+        taxoptions.save()
+        pass
     def assign_interest_rates(self):
         rates = [9]*30
         interest_rate = InterestRates(interest_type ="Interest & capital", term=20, rates=rates, property=Property.objects.get(id=self.id))
@@ -385,13 +389,13 @@ class TaxOptions(models.Model):
         ('Custom', 'Custom'), 
     ))
     taxrate = models.FloatField(('Tax Rate(%)'),null=True)
-    annualtaxableincome = models.FloatField(('Annual Taxableincome(%)'),null=False)
-    rate = models.IntegerField(null=True)
+    # annualtaxableincome = models.FloatField(('Annual Taxableincome(%)'),null=False)
+    # rate = models.IntegerField(null=True)
     maximumtaxrate = models.IntegerField(('Maximum Tax Rate (%)'),null=False)
-    income_rate = models.JSONField(null=True) # Format: {"income":000, "rate":000}
+    income_rate = ArrayField(models.JSONField(), null=True, default=list, blank=True)
     property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True)
-    def __str__(self):
-        return str(self.rate)
+    # def __str__(self):
+    #     return str(self.rate)
 class ManagementExpenses(models.Model):
     vacancyrate = models.IntegerField(('Vacancy Rate (%)'),null=True,default=0)
     managementfee = models.IntegerField(('Management Fee (%)'),null=True,default=0)

@@ -119,13 +119,18 @@ def edit_property(request, pk):
     property_instance = get_object_or_404(Property, pk=pk)
     interestrate_instance = InterestRates.objects.get(property=property_instance)
     interestrates_rates = interestrate_instance.rates
-    print(interestrates_rates)
     inflationrates_rates = property_instance.InflationRates
     depreciation_instance = Depreciation.objects.get(property=property_instance)
     capitalgrowthrate_rates = property_instance.CapitalGrowthRates
     monthly_expenses = property_instance.MonthlyExpenses  
     own_renovations = property_instance.OwnRenovations
     loan_renovations = property_instance.LoanRenovations
+    repairs_maintainences = property_instance.RepairsAndMaintainance
+    special_expenses = property_instance.special_expenses_list
+    taxoptions_instance = TaxOptions.objects.get(property=property_instance)
+    taxoptions_rates = taxoptions_instance.income_rate
+    managementexpenses_instance = ManagementExpenses.objects.get(property=property_instance)
+    additionalloan_payments = property_instance.AdditionalLoanPayments
     if request.method == 'POST':
         interestrate_forms = InterestRateForm(request.POST)
         interestrate_rateforms = InterestRateFormSet(request.POST)  
@@ -135,6 +140,12 @@ def edit_property(request, pk):
         monthlyexpenses_forms = MonthlyExpenseFormSet(request.POST)
         ownrenovations_forms = OwnRenovationsFormSet(request.POST)
         loanrenovations_forms = LoanRenovationsFormSet(request.POST)
+        repairsmaintainences_forms = RepairsAndMaintenanceFormSet(request.POST)
+        specialexpenses_forms = SpecialExpensesFormSet(request.POST)
+        taxoptions_forms = TaxOptionsForm(request.POST)
+        taxoptions_rateforms = TaxOptionFormSet(request.POST)
+        managementexpense_forms = ManagementExpensesForm(request.POST)
+        additioanloanpayment_forms = AdditionalLoanPaymentFormSet(request.POST)
         # Interst rates
         if interestrate_forms.is_valid() and interestrate_rateforms.is_valid(): 
             interestrate_instance.property = property_instance  
@@ -174,18 +185,58 @@ def edit_property(request, pk):
             property_instance.MonthlyExpenses = [{"Description": form.cleaned_data['monthly_expense_description'], "Value": form.cleaned_data['value']} for form in monthlyexpenses_forms]
             property_instance.save()
         else:
-            print("Monthly expenses form", monthlyexpenses_forms.errors)
+            # print("Monthly expenses form", monthlyexpenses_forms.errors)
+            pass
         # Own renovations
         if ownrenovations_forms.is_valid():
             property_instance.OwnRenovations = [{"Amount": form.cleaned_data['own_renovations_amount'], "Income per year": form.cleaned_data['own_renovations_income']} for form in ownrenovations_forms]
             property_instance.save()
         else:
             print("Own renovations form", ownrenovations_forms.errors)
+        # Loan renovations
         if loanrenovations_forms.is_valid():
             property_instance.LoanRenovations = [{"Amount": form.cleaned_data['loan_renovations_amount'], "Income per year": form.cleaned_data['loan_renovations_income']} for form in loanrenovations_forms]
             property_instance.save()
         else:
             print("Loan renovations form", loanrenovations_forms.errors)
+        # Repairs and Maintenance
+        if repairsmaintainences_forms.is_valid():
+            property_instance.RepairsAndMaintainance = [form.cleaned_data['repairsandmaintenance'] for form in repairsmaintainences_forms]
+        else:            
+            print("Repairs and Maintenence", repairsmaintainences_forms.errors)
+        # Special Expenses
+        if specialexpenses_forms.is_valid():
+            property_instance.special_expenses_list = [form.cleaned_data['special_expense'] for form in specialexpenses_forms]
+        else:
+            print("Special expenses form", specialexpenses_forms.errors)
+        # Tax Options
+        if taxoptions_forms.is_valid() and taxoptions_rateforms.is_valid():
+            ['rate', 'maximumtaxrate']
+            taxoptions_instance.property = property_instance
+            taxoptions_instance.taxationcapacity = taxoptions_forms.cleaned_data['taxationcapacity']
+            taxoptions_instance.method = taxoptions_forms.cleaned_data['method']
+            taxoptions_instance.taxrate = taxoptions_forms.cleaned_data['taxrate']
+            taxoptions_instance.maximumtaxrate = taxoptions_forms.cleaned_data['maximumtaxrate']
+            taxoptions_instance.income_rate = [{"income": form.cleaned_data['tax_options_income_rate'], "rate": form.cleaned_data['tax_options_rate']} for form in taxoptions_rateforms]
+            taxoptions_instance.save()
+        else:
+            print("Tax options forms", taxoptions_forms.errors)
+            print("Tax options rateforms", taxoptions_rateforms.errors)
+        # Management Expenses
+        if managementexpense_forms.is_valid():
+            managementexpenses_instance.vacancyrate = managementexpense_forms.cleaned_data['vacancyrate']
+            managementexpenses_instance.managementfee = managementexpense_forms.cleaned_data['managementfee']
+            managementexpenses_instance.managementfeeperyear = managementexpense_forms.cleaned_data['managementfeeperyear']
+            managementexpenses_instance.property = managementexpense_forms.cleaned_data['property']
+            managementexpenses_instance.save()
+        else:
+            print("Management Expenses", managementexpense_forms.errors)      
+        # Additional Loan Payments
+        if additioanloanpayment_forms.is_valid():
+            property_instance.AdditionalLoanPayments = [form.cleaned_data['additonalloanpayment']for form in additioanloanpayment_forms]
+            property_instance.save()
+        else:
+            print("Additional LoanPayment form", additioanloanpayment_forms.errors)
     else:
         interestrate_forms = InterestRateForm(instance=interestrate_instance)
         interestrate_rateforms = InterestRateFormSet(initial=[{'interestrate': interestrate} for interestrate in interestrates_rates])
@@ -219,7 +270,20 @@ def edit_property(request, pk):
                     loan_renovations_income = v
             loan_renovations_data.append({"loan_renovations_amount": loan_renovations_amount, "loan_renovations_income": loan_renovations_income})
         loanrenovations_forms = LoanRenovationsFormSet(initial = loan_renovations_data)
-            
+        repairsmaintainences_forms = RepairsAndMaintenanceFormSet(initial=[{'repairsandmaintenance': repairsandmaintenance} for repairsandmaintenance in repairs_maintainences])
+        specialexpenses_forms = SpecialExpensesFormSet(initial=[{'special_expense':special_expense} for special_expense in special_expenses])
+        taxoptions_forms = TaxOptionsForm(instance=taxoptions_instance)
+        taxoptions_data = []
+        for obj in taxoptions_rates:
+            for key, v in obj.items():
+                if key == "income":
+                    tax_options_income_rate = v
+                elif key == "rate":
+                    tax_options_rate = v
+            taxoptions_data.append({"tax_options_income_rate": tax_options_income_rate, "tax_options_rate": tax_options_rate})
+        taxoptions_rateforms = TaxOptionFormSet(initial=taxoptions_data)
+        managementexpense_forms = ManagementExpensesForm(instance=managementexpenses_instance)
+        additioanloanpayment_forms = AdditionalLoanPaymentFormSet(initial = [{"additonalloanpayment":additonalloanpayment} for additonalloanpayment in additionalloan_payments])
     context = {
         'interestrate_forms': interestrate_forms,
         'interestrate_rateforms': interestrate_rateforms,
@@ -229,6 +293,12 @@ def edit_property(request, pk):
         'monthlyexpenses_forms': monthlyexpenses_forms,
         'ownrenovations_forms': ownrenovations_forms,
         'loanrenovations_forms' : loanrenovations_forms,
+        'repairsmaintainences_forms': repairsmaintainences_forms,
+        'specialexpenses_forms': specialexpenses_forms,
+        'taxoptions_forms':taxoptions_forms,
+        'taxoptions_rateforms':taxoptions_rateforms,
+        'managementexpense_forms': managementexpense_forms,
+        'additioanloanpayment_forms': additioanloanpayment_forms,
         }
     return render(request, 'users/editproperty2.html', context=context)
         
