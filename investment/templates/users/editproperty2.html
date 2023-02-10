@@ -7,11 +7,16 @@
     <input type="button" value="Monthly Expenses Options" onclick="showModel6Forms()" class="btn btn-primary m-3">
     <input type="button" value="Own Renovations Options" onclick="showModel7Forms()" class="btn btn-primary m-3">
     <input type="button" value="Loan Renovations Options" onclick="showModel8Forms()" class="btn btn-primary m-3">
-    <input type="button" value="Repairs and Maintenance Options" onclick="showModel9Forms()" class="btn btn-primary m-3">
+    <input type="button" value="Repairs and Maintenance Options" onclick="showModel9Forms()"
+        class="btn btn-primary m-3">
     <input type="button" value="Special Expenses Options" onclick="showModel10Forms()" class="btn btn-primary m-3">
     <input type="button" value="Tax Options" onclick="showModel11Forms()" class="btn btn-primary m-3">
     <input type="button" value="Management Expenses Options" onclick="showModel12Forms()" class="btn btn-primary m-3">
-    <input type="button" value="Additional Loan Payments Options" onclick="showModel13Forms()" class="btn btn-primary m-3">
+    <input type="button" value="Additional Loan Payments Options" onclick="showModel13Forms()"
+        class="btn btn-primary m-3">
+    <input type="button" value="Capital income Options" onclick="showModel14Forms()" class="btn btn-primary m-3">
+    <input type="button" value="Rental income Options" onclick="showModel15Forms()" class="btn btn-primary m-3">
+    <input type="button" value="Comparison Options" onclick="showModel16Forms()" class="btn btn-primary m-3">
     <div class="row">
         <div class="col-6">
             <form method="post" class="m-1">
@@ -26,19 +31,19 @@
                     Term: {{ interestrate_forms.term }}
                     <br>
                     Rates:
-                    <br> 
+                    <br>
                     {{ interestrate_rateforms.management_form }}
-                    {% for form1 in interestrate_rateforms %}
-                        Year {{ forloop.counter }}: {{ form1.interestrate }}
-                        <br>
+                    {% for formone in interestrate_rateforms %}
+                    Year {{ forloop.counter }}: {{ formone.interestrate }}
+                    <br>
                     {% endfor %}
                 </div>
                 <div id="model3-forms" style="display:none;">
                     <h2>Model 3 Forms -- Inlfation rate options</h2>
                     {{ inflationrate_rateforms.management_form }}
-                    {% for form in inflationrate_rateforms %}
-                        Year {{ forloop.counter }}: {{ form.inflationrate }}
-                        <br>
+                    {% for formtwo in inflationrate_rateforms %}
+                    Year {{ forloop.counter }}: {{ formtwo.inflationrate }}
+                    <br>
                     {% endfor %}
                 </div>
                 <div id="model4-forms" style="display:none;">
@@ -53,56 +58,56 @@
                 <div id="model5-forms" style="display:none;">
                     <h2>Model 5 Forms -- Capital Growth Rate options</h2>
                     {{ capitalgrowthrate_rateforms.management_form }}
-                    {% for form in capitalgrowthrate_rateforms %}
-                        Year {{ forloop.counter }}: {{ form.capitalgrowthrate }}
-                        <br>
+                    {% for formthree in capitalgrowthrate_rateforms %}
+                    Year {{ forloop.counter }}: {{ formthree.capitalgrowthrate }}
+                    <br>
                     {% endfor %}
                 </div>
                 <div id="model6-forms" style="display:none;">
                     <h2>Model 6 Forms -- Monthly Expenses</h2>
                     {{ monthlyexpenses_forms.management_form }}
                     Description - Amount <br>
-                    {% for form in monthlyexpenses_forms %}
-                        {{ form.monthly_expense_description }} : {{ form.value }}
-                        <br>
+                    {% for formfour in monthlyexpenses_forms %}
+                    {{ formfour.monthly_expense_description }} : {{ formfour.value }}
+                    <br>
                     {% endfor %}
                 </div>
                 <div id="model7-forms" style="display:none;">
                     <h2>Model 7 Forms -- Own Renovations</h2>
                     {{ ownrenovations_forms.management_form }}
                     Year - Amount - Income per year<br>
-                    {% for form in ownrenovations_forms %}
-                    {{ forloop.counter }}: {{ form.own_renovations_amount }} {{ form.own_renovations_income }}
-                        <br>
+                    {% for formfive in ownrenovations_forms %}
+                    {{ forloop.counter }}: {{ formfive.own_renovations_amount }} {{ formfive.own_renovations_income }}
+                    <br>
                     {% endfor %}
                 </div>
                 <div id="model8-forms" style="display:none;">
                     <h2>Model 8 Forms -- Loan Renovations</h2>
                     {{ ownrenovations_forms.management_form }}
                     Year - Amount - Income per year<br>
-                    {% for form in loanrenovations_forms %}
-                    {{ forloop.counter }}: {{ form.loan_renovations_amount }} {{ form.loan_renovations_income }}
-                        <br>
+                    {% for formsix in loanrenovations_forms %}
+                    {{ forloop.counter }}: {{ formsix.loan_renovations_amount }} {{ formsix.loan_renovations_income }}
+                    <br>
                     {% endfor %}
                 </div>
                 <div id="model9-forms" style="display:none;">
                     <h2>Model 9 Forms -- Repairs and Maintenance </h2>
                     {{ repairsmaintainences_forms.management_form }}
-                    {% for form in repairsmaintainences_forms %}
-                        {{ forloop.counter }}: {{ form.repairsandmaintenance }}
-                        <br>
+                    {% for formseven in repairsmaintainences_forms %}
+                    {{ forloop.counter }}: {{ formseven.repairsandmaintenance }}
+                    <br>
                     {% endfor %}
                 </div>
                 <div id="model10-forms" style="display:none;">
                     <h2>Model 10 Forms -- Special expenses </h2>
                     {{ specialexpenses_forms.management_form }}
-                    {% for form in specialexpenses_forms %}
-                        {{ forloop.counter }}: {{ form.special_expense }}
-                        <br>
+                    {% for formeight in specialexpenses_forms %}
+                    {{ forloop.counter }}: {{ formeight.special_expense }}
+                    <br>
                     {% endfor %}
                 </div>
                 <div id="model11-forms" style="display:none;">
-                    <h2>Model 2 Forms -- Interest rate options</h2>
+                    <h2>Model 11 Forms -- Tax options</h2>
                     <div style="display:none;">Property: {{ taxoptions_forms.property }}</div>
                     Taxation Capacity: {{ taxoptions_forms.taxationcapacity}}
                     <br>
@@ -113,12 +118,12 @@
                     Maximum Tax Rate: {{ taxoptions_forms.maximumtaxrate }}
                     <br>
                     Rates:
-                    <br> 
+                    <br>
                     {{ taxoptions_rateforms.management_form }}
                     Income amount - Rate<br>
-                    {% for form in taxoptions_rateforms %}
-                    {{ forloop.counter }}: {{ form.tax_options_income_rate }} {{ form.tax_options_rate }}
-                        <br>
+                    {% for formnine in taxoptions_rateforms %}
+                    {{ forloop.counter }}: {{ formnine.tax_options_income_rate }} {{ formnine.tax_options_rate }}
+                    <br>
                     {% endfor %}
                 </div>
                 <div id="model12-forms" style="display:none;">
@@ -132,23 +137,56 @@
                     <h2>Model 13 Forms -- Additional Loan Payments</h2>
                     {{ additioanloanpayment_forms.management_form }}
                     Year - Amount <br>
-                    {% for form in additioanloanpayment_forms %}
-                        {{ forloop.counter }}:{{ form.additonalloanpayment }}
-                        <br>
+                    {% for formten in additioanloanpayment_forms %}
+                    {{ forloop.counter }}:{{ formten.additonalloanpayment }}
+                    <br>
                     {% endfor %}
+                </div>
+                <div id="model14-forms" style="display:none;">
+                    <h2>Model 14 Forms -- Capital Income options</h2>
+                    {{ capitalincome_forms.management_form }}
+                    {% for formeleven in capitalincome_forms %}
+                    {{ forloop.counter }}:{{ formeleven.capital_income }}
+                    <br>
+                    {% endfor %}
+                </div>
+
+                <div id="model15-forms" style="display:none;">
+                    <h2>Model 15 Forms -- rental Income options</h2>
+                    <div style="display:none;">Property: {{ rentalincome_forms.property }}</div>
+                    Rental Income Increase Type: {{ rentalincome_forms.rentalincreasetype}}
+                    <br>
+                    Increase Percentage: {{ rentalincome_forms.increasepercentage }}
+                    <br>
+                    Average Income per month: {{ rentalincome_forms.averagerentalincomepermonth }}
+                    <br>
+                    Amount:
+                    <br>
+                    {{ rentalincomeamounts_form.management_form }}
+                    Rental amount - Rate<br>
+                    {% for formtwelve in rentalincomeamounts_form %}
+                        {{ forloop.counter }}: {{ formtwelve.rental_income }}
+                    <br>
+                    {% endfor %}
+                </div>
+                <div id="model16-forms" style="display:none;">
+                    <h2>Model 16 Forms -- Comparison</h2>
+                    <div style="display:none;">Property: {{ comparison_form.property }}</div>
+                    Description: {{ comparison_form.description }}
+                    Rate: {{ comparison_form.comparison_rate }}
                 </div>
 
                 {% if form.errors %}
                 <ul>
                     {% for field in form %}
-                        {% for error in field.errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
+                    {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
                     {% endfor %}
                 </ul>
                 {% endif %}
                 <input type="submit" value="Save" class="btn btn-primary m-3">
-              </form>
+            </form>
 
         </div>
     </div>
@@ -167,8 +205,12 @@
         document.getElementById("model11-forms").style.display = "none";
         document.getElementById("model12-forms").style.display = "none";
         document.getElementById("model13-forms").style.display = "none";
+        document.getElementById("model14-forms").style.display = "none";
+        document.getElementById("model15-forms").style.display = "none";
+        document.getElementById("model16-forms").style.display = "none";
     }
-    function showModel3Forms(){
+
+    function showModel3Forms() {
         document.getElementById("model2-forms").style.display = "none";
         document.getElementById("model3-forms").style.display = "block";
         document.getElementById("model4-forms").style.display = "none";
@@ -181,8 +223,12 @@
         document.getElementById("model11-forms").style.display = "none";
         document.getElementById("model12-forms").style.display = "none";
         document.getElementById("model13-forms").style.display = "none";
+        document.getElementById("model14-forms").style.display = "none";
+        document.getElementById("model15-forms").style.display = "none";
+        document.getElementById("model16-forms").style.display = "none";
     }
-    function showModel4Forms(){
+
+    function showModel4Forms() {
         document.getElementById("model2-forms").style.display = "none";
         document.getElementById("model3-forms").style.display = "none";
         document.getElementById("model4-forms").style.display = "block";
@@ -195,8 +241,12 @@
         document.getElementById("model11-forms").style.display = "none";
         document.getElementById("model12-forms").style.display = "none";
         document.getElementById("model13-forms").style.display = "none";
+        document.getElementById("model14-forms").style.display = "none";
+        document.getElementById("model15-forms").style.display = "none";
+        document.getElementById("model16-forms").style.display = "none";
     }
-    function showModel5Forms(){
+
+    function showModel5Forms() {
         document.getElementById("model2-forms").style.display = "none";
         document.getElementById("model3-forms").style.display = "none";
         document.getElementById("model4-forms").style.display = "none";
@@ -209,8 +259,12 @@
         document.getElementById("model11-forms").style.display = "none";
         document.getElementById("model12-forms").style.display = "none";
         document.getElementById("model13-forms").style.display = "none";
+        document.getElementById("model14-forms").style.display = "none";
+        document.getElementById("model15-forms").style.display = "none";
+        document.getElementById("model16-forms").style.display = "none";
     }
-    function showModel6Forms(){
+
+    function showModel6Forms() {
         document.getElementById("model2-forms").style.display = "none";
         document.getElementById("model3-forms").style.display = "none";
         document.getElementById("model4-forms").style.display = "none";
@@ -223,8 +277,12 @@
         document.getElementById("model11-forms").style.display = "none";
         document.getElementById("model12-forms").style.display = "none";
         document.getElementById("model13-forms").style.display = "none";
+        document.getElementById("model14-forms").style.display = "none";
+        document.getElementById("model15-forms").style.display = "none";
+        document.getElementById("model16-forms").style.display = "none";
     }
-    function showModel7Forms(){
+
+    function showModel7Forms() {
         document.getElementById("model2-forms").style.display = "none";
         document.getElementById("model3-forms").style.display = "none";
         document.getElementById("model4-forms").style.display = "none";
@@ -237,8 +295,12 @@
         document.getElementById("model11-forms").style.display = "none";
         document.getElementById("model12-forms").style.display = "none";
         document.getElementById("model13-forms").style.display = "none";
+        document.getElementById("model14-forms").style.display = "none";
+        document.getElementById("model15-forms").style.display = "none";
+        document.getElementById("model16-forms").style.display = "none";
     }
-    function showModel8Forms(){
+
+    function showModel8Forms() {
         document.getElementById("model2-forms").style.display = "none";
         document.getElementById("model3-forms").style.display = "none";
         document.getElementById("model4-forms").style.display = "none";
@@ -251,8 +313,12 @@
         document.getElementById("model11-forms").style.display = "none";
         document.getElementById("model12-forms").style.display = "none";
         document.getElementById("model13-forms").style.display = "none";
+        document.getElementById("model14-forms").style.display = "none";
+        document.getElementById("model15-forms").style.display = "none";
+        document.getElementById("model16-forms").style.display = "none";
     }
-    function showModel9Forms(){
+
+    function showModel9Forms() {
         document.getElementById("model2-forms").style.display = "none";
         document.getElementById("model3-forms").style.display = "none";
         document.getElementById("model4-forms").style.display = "none";
@@ -265,8 +331,12 @@
         document.getElementById("model11-forms").style.display = "none";
         document.getElementById("model12-forms").style.display = "none";
         document.getElementById("model13-forms").style.display = "none";
+        document.getElementById("model14-forms").style.display = "none";
+        document.getElementById("model15-forms").style.display = "none";
+        document.getElementById("model16-forms").style.display = "none";
     }
-    function showModel10Forms(){
+
+    function showModel10Forms() {
         document.getElementById("model2-forms").style.display = "none";
         document.getElementById("model3-forms").style.display = "none";
         document.getElementById("model4-forms").style.display = "none";
@@ -279,8 +349,12 @@
         document.getElementById("model11-forms").style.display = "none";
         document.getElementById("model12-forms").style.display = "none";
         document.getElementById("model13-forms").style.display = "none";
+        document.getElementById("model14-forms").style.display = "none";
+        document.getElementById("model15-forms").style.display = "none";
+        document.getElementById("model16-forms").style.display = "none";
     }
-    function showModel11Forms(){
+
+    function showModel11Forms() {
         document.getElementById("model2-forms").style.display = "none";
         document.getElementById("model3-forms").style.display = "none";
         document.getElementById("model4-forms").style.display = "none";
@@ -293,8 +367,12 @@
         document.getElementById("model11-forms").style.display = "block";
         document.getElementById("model12-forms").style.display = "none";
         document.getElementById("model13-forms").style.display = "none";
+        document.getElementById("model14-forms").style.display = "none";
+        document.getElementById("model15-forms").style.display = "none";
+        document.getElementById("model16-forms").style.display = "none";
     }
-    function showModel12Forms(){
+
+    function showModel12Forms() {
         document.getElementById("model2-forms").style.display = "none";
         document.getElementById("model3-forms").style.display = "none";
         document.getElementById("model4-forms").style.display = "none";
@@ -307,8 +385,12 @@
         document.getElementById("model11-forms").style.display = "none";
         document.getElementById("model12-forms").style.display = "block";
         document.getElementById("model13-forms").style.display = "none";
+        document.getElementById("model14-forms").style.display = "none";
+        document.getElementById("model15-forms").style.display = "none";
+        document.getElementById("model16-forms").style.display = "none";
     }
-    function showModel13Forms(){
+
+    function showModel13Forms() {
         document.getElementById("model2-forms").style.display = "none";
         document.getElementById("model3-forms").style.display = "none";
         document.getElementById("model4-forms").style.display = "none";
@@ -321,6 +403,63 @@
         document.getElementById("model11-forms").style.display = "none";
         document.getElementById("model12-forms").style.display = "none";
         document.getElementById("model13-forms").style.display = "block";
+        document.getElementById("model14-forms").style.display = "none";
+        document.getElementById("model15-forms").style.display = "none";
+        document.getElementById("model16-forms").style.display = "none";
+    }
+
+    function showModel14Forms() {
+        document.getElementById("model2-forms").style.display = "none";
+        document.getElementById("model3-forms").style.display = "none";
+        document.getElementById("model4-forms").style.display = "none";
+        document.getElementById("model5-forms").style.display = "none";
+        document.getElementById("model6-forms").style.display = "none";
+        document.getElementById("model7-forms").style.display = "none";
+        document.getElementById("model8-forms").style.display = "none";
+        document.getElementById("model9-forms").style.display = "none";
+        document.getElementById("model10-forms").style.display = "none";
+        document.getElementById("model11-forms").style.display = "none";
+        document.getElementById("model12-forms").style.display = "none";
+        document.getElementById("model13-forms").style.display = "none";
+        document.getElementById("model14-forms").style.display = "block";
+        document.getElementById("model15-forms").style.display = "none";
+        document.getElementById("model16-forms").style.display = "none";
+    }
+
+    function showModel15Forms() {
+        document.getElementById("model2-forms").style.display = "none";
+        document.getElementById("model3-forms").style.display = "none";
+        document.getElementById("model4-forms").style.display = "none";
+        document.getElementById("model5-forms").style.display = "none";
+        document.getElementById("model6-forms").style.display = "none";
+        document.getElementById("model7-forms").style.display = "none";
+        document.getElementById("model8-forms").style.display = "none";
+        document.getElementById("model9-forms").style.display = "none";
+        document.getElementById("model10-forms").style.display = "none";
+        document.getElementById("model11-forms").style.display = "none";
+        document.getElementById("model12-forms").style.display = "none";
+        document.getElementById("model13-forms").style.display = "none";
+        document.getElementById("model14-forms").style.display = "none";
+        document.getElementById("model15-forms").style.display = "block";
+        document.getElementById("model16-forms").style.display = "none";
+    }
+
+    function showModel16Forms() {
+        document.getElementById("model2-forms").style.display = "none";
+        document.getElementById("model3-forms").style.display = "none";
+        document.getElementById("model4-forms").style.display = "none";
+        document.getElementById("model5-forms").style.display = "none";
+        document.getElementById("model6-forms").style.display = "none";
+        document.getElementById("model7-forms").style.display = "none";
+        document.getElementById("model8-forms").style.display = "none";
+        document.getElementById("model9-forms").style.display = "none";
+        document.getElementById("model10-forms").style.display = "none";
+        document.getElementById("model11-forms").style.display = "none";
+        document.getElementById("model12-forms").style.display = "none";
+        document.getElementById("model13-forms").style.display = "none";
+        document.getElementById("model14-forms").style.display = "none";
+        document.getElementById("model15-forms").style.display = "none";
+        document.getElementById("model16-forms").style.display = "block";
     }
 </script>
 {% endblock %}
