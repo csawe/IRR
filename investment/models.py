@@ -603,7 +603,7 @@ class ManagementExpenses(models.Model):
     vacancyrate = models.IntegerField(("Vacancy Rate (%)"), null=True, default=0)
     managementfee = models.IntegerField(("Management Fee (%)"), null=True, default=0)
     managementfeeperyear = models.IntegerField(("Management Fee per Year "))
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.vacancyrate)
@@ -635,9 +635,11 @@ class RentalIncome(models.Model):
 
 
 class Comparison(models.Model):
-    description = models.CharField(max_length=255, null=True)
-    comparison_rate = models.IntegerField(("Rate (%)"), null=True, default=0)
-    property = models.ForeignKey(Property, on_delete=models.CASCADE, null=True)
+    comparison_description = models.CharField(max_length=255, null=True, blank=True)
+    comparison_rate = models.IntegerField(
+        ("Rate (%)"), null=True, default=0, blank=True
+    )
+    property = models.ForeignKey(Property, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.description)
+        return str(self.comparison_description)

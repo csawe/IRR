@@ -3,35 +3,37 @@ from django.urls import reverse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
 
 from django.forms import modelform_factory, formset_factory
 
+
 # Create your views here.
 # Homepage
-@login_required(login_url='login')
+@login_required(login_url="login")
 def welcome(request):
     all_property = Property.objects.all()
-    context = {
-        'all_property': all_property
-    }
-    return render(request, 'home.html', context=context)
+    context = {"all_property": all_property}
+    return render(request, "home.html", context=context)
+
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, "index.html")
+
 
 def signup(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('login')
+            return redirect("login")
     else:
         form = SignUpForm()
-    return render(request, 'users/signup.html', {'form': form})
+    return render(request, "users/signup.html", {"form": form})
+
 
 def log_in(request):
     error = False
@@ -43,28 +45,30 @@ def log_in(request):
             user = authenticate(email=email, password=password)
             if user:
                 login(request, user)
-                return redirect('home')
+                return redirect("home")
             else:
                 error = True
     else:
         form = LogInForm()
-    return render(request, 'users/login.html', {'form': form, 'error': error})
+    return render(request, "users/login.html", {"form": form, "error": error})
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def log_out(request):
     logout(request)
-    return redirect(reverse('login'))
+    return redirect(reverse("login"))
+
 
 # Add property
-@login_required(login_url='login')
+@login_required(login_url="login")
 def add_property(request):
     property_form = PropertyForm()
-    if request.method == 'POST':
+    if request.method == "POST":
         property_form = PropertyForm(request.POST)
         if property_form.is_valid():
             temp = property_form.save()
             property_id = temp.id
- 
+
             temp.assign_interest_rates()
             temp.assign_management_expenses()
             temp.assign_depreciation()
@@ -72,14 +76,14 @@ def add_property(request):
             temp.assign_comparison()
             temp.assign_ownrenovations()
             temp.assign_loanrenovations()
-            
+
             temp.assign_inflationrates()
             temp.assign_capitalgrowthrates()
             temp.assign_repairsandmaintenance()
             temp.assign_specialexpenses()
             temp.assign_additionalloanpayments()
             temp.assign_capitalincome()
-            
+
             # Fill table
             temp.assign_property_value()
             temp.assign_outstanding_loan()
@@ -107,12 +111,11 @@ def add_property(request):
             temp.assign_after_tax_cashoncash()
             temp.assign_income()
             temp.assign_irr()
-            
-            return redirect(f'../addimages/{property_id}')
-    context = {
-        'property_form': property_form
-    }
-    return render(request, 'users/addproperty.html', context=context)
+
+            return redirect(f"../addimages/{property_id}")
+    context = {"property_form": property_form}
+    return render(request, "users/addproperty.html", context=context)
+
 
 def edit_property(request, pk):
     property_instance = get_object_or_404(Property, pk=pk)
@@ -142,10 +145,9 @@ def edit_property(request, pk):
     # rentalincome_instance = get_object_or_404(RentalIncome, property=property_instance)
     # rentalincome_list = rentalincome_instance.amount
     # comparison_instance = get_object_or_404(Comparison, property=property_instance)
-    
-    
-    if request.method == 'POST':
-        #model1_formset = Model1Formset(request.POST, prefix='model1')
+
+    if request.method == "POST":
+        # model1_formset = Model1Formset(request.POST, prefix='model1')
         model2_formset = InterestRateForm(request.POST)
         interestrate_rateforms = RateFormSet(request.POST)
         # model3_formset = Model3Formset(request.POST, prefix='model3')
@@ -170,17 +172,17 @@ def edit_property(request, pk):
         # model15_formset = Model15Formset(request.POST, prefix='model15')
         # rentalincome_rateforms = RateFormSet(request.POST)
         # model16_formset = Model16Formset(request.POST, prefix='model16')
-        
+
         if model2_formset.is_valid() and interestrate_rateforms.is_valid():
-        # and model3_formset.is_valid() and inflationrates_rateforms.is_valid() and model4_formset.is_valid() and \
-        #     model5_formset.is_valid() and capitalgrowthrates_rateforms.is_valid() and model6_formset.is_valid() and model7_formset.is_valid() and ownrenovations_jsonforms.is_valid() and \
-        #         model8_formset.is_valid() and model9_formset.is_valid() and repairs_rateforms.is_valid() and model10_formset.is_valid() and special_rateforms.is_valid() and \
-        #             model11_formset.is_valid() and model12_formset.is_valid() and model13_formset.is_valid() and additionalpayments_rateforms.is_valid() and \
-        #                 model14_formset.is_valid() and capitalincome_rateforms.is_valid() and model15_formset.is_valid() and rentalincome_rateforms.is_valid() and model16_formset.is_valid():
+            # and model3_formset.is_valid() and inflationrates_rateforms.is_valid() and model4_formset.is_valid() and \
+            #     model5_formset.is_valid() and capitalgrowthrates_rateforms.is_valid() and model6_formset.is_valid() and model7_formset.is_valid() and ownrenovations_jsonforms.is_valid() and \
+            #         model8_formset.is_valid() and model9_formset.is_valid() and repairs_rateforms.is_valid() and model10_formset.is_valid() and special_rateforms.is_valid() and \
+            #             model11_formset.is_valid() and model12_formset.is_valid() and model13_formset.is_valid() and additionalpayments_rateforms.is_valid() and \
+            #                 model14_formset.is_valid() and capitalincome_rateforms.is_valid() and model15_formset.is_valid() and rentalincome_rateforms.is_valid() and model16_formset.is_valid():
             # for form in model2_formset:
-                # interest_rates = [form.cleaned_data['rate'] for form in interestrate_rateforms]
-                # interestrates_rates.rates = interest_rates
-                # interestrates_rates.save()
+            # interest_rates = [form.cleaned_data['rate'] for form in interestrate_rateforms]
+            # interestrates_rates.rates = interest_rates
+            # interestrates_rates.save()
             model2_formset.save()
             interestrate_rateforms.save()
             # for form in model3_formset:
@@ -240,7 +242,9 @@ def edit_property(request, pk):
         # model1_formset = Model1Formset(prefix='model1', form_kwargs={'instance': property_instance})
         # model2_formset = InterestRateForm(prefix='model2', form_kwargs={'instance': interestrate_instance})
         model2_formset = InterestRateForm(instance=interestrate_instance)
-        interestrate_rateforms = RateFormSet(initial=[{'rate': rate} for rate in interestrates_rates])
+        interestrate_rateforms = RateFormSet(
+            initial=[{"rate": rate} for rate in interestrates_rates]
+        )
         # model3_formset = Model3Formset(prefix='model3', form_kwargs={'instance': property_instance})
         # inflationrates_rateforms = RateFormSet(initial=[{'rate': rate} for rate in inflationrates_rates])
         # model4_formset = Model4Formset(prefix='model4', form_kwargs={'instance': depreciation_instance})
@@ -267,9 +271,9 @@ def edit_property(request, pk):
         # model16_formset = Model15Formset(prefix='model16', form_kwargs={'instance': comparison_instance})
 
     context = {
-        # 'model1_formset': model1_formset, 
-        'model2_formset': model2_formset,
-        'interestrate_rateforms': interestrate_rateforms,
+        # 'model1_formset': model1_formset,
+        "model2_formset": model2_formset,
+        "interestrate_rateforms": interestrate_rateforms,
         # 'model3_formset': model3_formset,
         # 'inflationrates_rateforms': inflationrates_rateforms,
         # 'model4_formset': model4_formset,
@@ -278,7 +282,6 @@ def edit_property(request, pk):
         # 'model6_formset': model6_formset,
         # 'model7_formset': model7_formset,
         # 'ownrenovations_jsonforms' : ownrenovations_jsonforms,
-        
         # 'model8_formset': model8_formset,
         # 'model9_formset': model9_formset,
         # 'repairs_rateforms': repairs_rateforms,
@@ -293,45 +296,42 @@ def edit_property(request, pk):
         # 'model15_formset': model15_formset,
         # 'rentalincome_rateforms': rentalincome_rateforms,
         # 'model16_formset': model16_formset,
-        }
-    return render(request, 'users/editproperty2.html', context=context)
-        
-@login_required(login_url='login')
+    }
+    return render(request, "users/editproperty2.html", context=context)
+
+
+@login_required(login_url="login")
 def addimages(request, id):
     property = Property.objects.all()
-    if request.method == 'POST':
+    if request.method == "POST":
         data = request.POST
-        images = request.FILES.getlist('images')
+        images = request.FILES.getlist("images")
         # if data['property'] != 'none':
         #     property = Property.objects.get(id=id)
         property = Property.objects.get(id=id)
         print(images, property)
         for image in images:
-            images = Images.objects.create(
-                property=property,
-                image=image
-            )
-            return redirect('home')
-    context = {'property': property}
-    return render(request, 'users/addimages.html', context=context)
+            images = Images.objects.create(property=property, image=image)
+            return redirect("home")
+    context = {"property": property}
+    return render(request, "users/addimages.html", context=context)
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def view_one_property(request, id):
     property_obj = Property.objects.get(id=id)
     images = Images.objects.filter(property=property_obj)
-    context = {
-        'property_obj': property_obj,
-        'images': images
-    }
-    return render(request, 'users/propertypage.html', context=context)
+    context = {"property_obj": property_obj, "images": images}
+    return render(request, "users/propertypage.html", context=context)
 
-#continue Thursday
+
+# continue Thursday
 def interestview(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = InterestRateForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('home')
+            return redirect("home")
     else:
         form = InterestRateForm()
-    return render(request, 'users/interestrates.html', {'form': form})
+    return render(request, "users/interestrates.html", {"form": form})

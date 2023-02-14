@@ -165,7 +165,7 @@ class RentalIncomeForm(forms.ModelForm):
 class ComparisonForm(forms.ModelForm):
     class Meta:
         model = Comparison
-        fields = ["description", "comparison_rate", "property"]
+        fields = ["comparison_description", "comparison_rate", "property"]
 
 
 class InterestRateFormRate(forms.Form):

@@ -142,25 +142,45 @@ def edit_property(request, pk):
     comparison_instance = Comparison.objects.get(property=property_instance)
     if request.method == "POST":
         interestrate_forms = InterestRateForm(request.POST)
-        interestrate_rateforms = InterestRateFormSet(request.POST)
-        inflationrate_rateforms = InflationRatesFormSet(request.POST)
+        interestrate_rateforms = InterestRateFormSet(
+            request.POST, prefix="intereset_rateforms"
+        )
+        inflationrate_rateforms = InflationRatesFormSet(
+            request.POST, prefix="inflation_rates"
+        )
         depreciation_forms = DepreciationForm(request.POST)
-        capitalgrowthrate_rateforms = CapitalGrowthRatesFormSet(request.POST)
-        monthlyexpenses_forms = MonthlyExpenseFormSet(request.POST)
-        ownrenovations_forms = OwnRenovationsFormSet(request.POST)
-        loanrenovations_forms = LoanRenovationsFormSet(request.POST)
-        repairsmaintainences_forms = RepairsAndMaintenanceFormSet(request.POST)
-        specialexpenses_forms = SpecialExpensesFormSet(request.POST)
+        capitalgrowthrate_rateforms = CapitalGrowthRatesFormSet(
+            request.POST, prefix="capitalgrowth_rates"
+        )
+        monthlyexpenses_forms = MonthlyExpenseFormSet(
+            request.POST, prefix="monthly_expenses"
+        )
+        ownrenovations_forms = OwnRenovationsFormSet(
+            request.POST, prefix="own_renovations"
+        )
+        loanrenovations_forms = LoanRenovationsFormSet(
+            request.POST, prefix="loan_renovations"
+        )
+        repairsmaintainences_forms = RepairsAndMaintenanceFormSet(
+            request.POST, prefix="repairsandmaintenance"
+        )
+        specialexpenses_forms = SpecialExpensesFormSet(
+            request.POST, prefix="special_expenses"
+        )
         taxoptions_forms = TaxOptionsForm(request.POST)
-        taxoptions_rateforms = TaxOptionFormSet(request.POST)
+        taxoptions_rateforms = TaxOptionFormSet(request.POST, prefix="taxoptions_rates")
         managementexpense_forms = ManagementExpensesForm(request.POST)
-        additioanloanpayment_forms = AdditionalLoanPaymentFormSet(request.POST)
-        capitalincome_forms = CapitalIncomeFormSet(request.POST)
+        additioanloanpayment_forms = AdditionalLoanPaymentFormSet(
+            request.POST, prefix="additionalloan_payments"
+        )
+        capitalincome_forms = CapitalIncomeFormSet(
+            request.POST, prefix="capital_income"
+        )
         rentalincome_forms = RentalIncomeForm(request.POST)
-        rentalincomeamounts_form = RentalIncomeFormSet(request.POST)
+        rentalincomeamounts_form = RentalIncomeFormSet(
+            request.POST, prefix="rental_income"
+        )
         comparison_form = ComparisonForm(request.POST)
-
-        print("Submitting")
         # Interst rates
         if interestrate_forms.is_valid() and interestrate_rateforms.is_valid():
             interestrate_instance.property = property_instance
@@ -248,7 +268,7 @@ def edit_property(request, pk):
             ]
             property_instance.save()
         else:
-            print("Loan renovations form", loanrenovations_forms.errors)
+            print("Loan renovations form--", loanrenovations_forms.errors)
         # Repairs and Maintenance
         if repairsmaintainences_forms.is_valid():
             property_instance.RepairsAndMaintainance = [
@@ -347,7 +367,7 @@ def edit_property(request, pk):
         if comparison_form.is_valid():
             comparison_instance.property = property_instance
             comparison_instance.description = comparison_form.cleaned_data[
-                "description"
+                "comparison_description"
             ]
             comparison_instance.comparison_rate = comparison_form.cleaned_data[
                 "comparison_rate"
@@ -361,20 +381,23 @@ def edit_property(request, pk):
         interestrate_rateforms = InterestRateFormSet(
             initial=[
                 {"interestrate": interestrate} for interestrate in interestrates_rates
-            ]
+            ],
+            prefix="intereset_rateforms",
         )
         inflationrate_rateforms = InflationRatesFormSet(
             initial=[
                 {"inflationrate": inflationrate}
                 for inflationrate in inflationrates_rates
-            ]
+            ],
+            prefix="inflation_rates",
         )
         depreciation_forms = DepreciationForm(instance=depreciation_instance)
         capitalgrowthrate_rateforms = CapitalGrowthRatesFormSet(
             initial=[
                 {"capitalgrowthrate": capitalgrowthrate}
                 for capitalgrowthrate in capitalgrowthrate_rates
-            ]
+            ],
+            prefix="capitalgrowth_rates",
         )
         monthly_expenses_data = []
         for obj in monthly_expenses:
@@ -389,7 +412,9 @@ def edit_property(request, pk):
                     "value": value,
                 }
             )
-        monthlyexpenses_forms = MonthlyExpenseFormSet(initial=monthly_expenses_data)
+        monthlyexpenses_forms = MonthlyExpenseFormSet(
+            initial=monthly_expenses_data, prefix="monthly_expenses"
+        )
         own_renovations_data = []
         for obj in own_renovations:
             for key, v in obj.items():
@@ -403,7 +428,9 @@ def edit_property(request, pk):
                     "own_renovations_income": own_renovations_income,
                 }
             )
-        ownrenovations_forms = OwnRenovationsFormSet(initial=own_renovations_data)
+        ownrenovations_forms = OwnRenovationsFormSet(
+            initial=own_renovations_data, prefix="own_renovations"
+        )
         loan_renovations_data = []
         for obj in loan_renovations:
             for key, v in obj.items():
@@ -417,18 +444,22 @@ def edit_property(request, pk):
                     "loan_renovations_income": loan_renovations_income,
                 }
             )
-        loanrenovations_forms = LoanRenovationsFormSet(initial=loan_renovations_data)
+        loanrenovations_forms = LoanRenovationsFormSet(
+            initial=loan_renovations_data, prefix="loan_renovations"
+        )
         repairsmaintainences_forms = RepairsAndMaintenanceFormSet(
             initial=[
                 {"repairsandmaintenance": repairsandmaintenance}
                 for repairsandmaintenance in repairs_maintainences
-            ]
+            ],
+            prefix="repairsandmaintenance",
         )
         specialexpenses_forms = SpecialExpensesFormSet(
             initial=[
                 {"special_expense": special_expense}
                 for special_expense in special_expenses
-            ]
+            ],
+            prefix="special_expenses",
         )
         taxoptions_forms = TaxOptionsForm(instance=taxoptions_instance)
         taxoptions_data = []
@@ -444,7 +475,9 @@ def edit_property(request, pk):
                     "tax_options_rate": tax_options_rate,
                 }
             )
-        taxoptions_rateforms = TaxOptionFormSet(initial=taxoptions_data)
+        taxoptions_rateforms = TaxOptionFormSet(
+            initial=taxoptions_data, prefix="taxoptions_rates"
+        )
         managementexpense_forms = ManagementExpensesForm(
             instance=managementexpenses_instance
         )
@@ -452,18 +485,21 @@ def edit_property(request, pk):
             initial=[
                 {"additonalloanpayment": additonalloanpayment}
                 for additonalloanpayment in additionalloan_payments
-            ]
+            ],
+            prefix="additionalloan_payments",
         )
         capitalincome_forms = CapitalIncomeFormSet(
             initial=[
                 {"capital_income": capital_income} for capital_income in capital_incomes
-            ]
+            ],
+            prefix="capital_income",
         )
         rentalincome_forms = RentalIncomeForm(instance=rentalincome_instance)
         rentalincomeamounts_form = RentalIncomeFormSet(
             initial=[
                 {"rental_income": rental_income} for rental_income in rental_incomes
-            ]
+            ],
+            prefix="rental_income",
         )
         comparison_form = ComparisonForm(instance=comparison_instance)
     context = {

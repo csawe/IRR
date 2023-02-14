@@ -172,10 +172,9 @@
                 <div id="model16-forms" style="display:none;">
                     <h2>Model 16 Forms -- Comparison</h2>
                     <div style="display:none;">Property: {{ comparison_form.property }}</div>
-                    Description: {{ comparison_form.description }}
+                    Description: {{ comparison_form.comparison_description }}
                     Rate: {{ comparison_form.comparison_rate }}
                 </div>
-
                 {% if form.errors %}
                 <ul>
                     {% for field in form %}
