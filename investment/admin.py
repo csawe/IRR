@@ -11,10 +11,11 @@ admin.site.register(PropertyType)
 admin.site.register(OtherCosts)
 admin.site.register(Images)
 admin.site.register(InterestRates)
-admin.site.register(InflationRates)
 admin.site.register(Depreciation)
-admin.site.register(CapitalGrowthRates)
-admin.site.register(MonthlyExpense)
+admin.site.register(ManagementExpenses)
+admin.site.register(TaxOptions)
+admin.site.register(RentalIncome)
+admin.site.register(Comparison)
 
 
 
