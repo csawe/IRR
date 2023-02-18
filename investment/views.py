@@ -546,7 +546,18 @@ def addimages(request, id):
 def view_one_property(request, id):
     property_obj = Property.objects.get(id=id)
     images = Images.objects.filter(property=property_obj)
-    context = {"property_obj": property_obj, "images": images}
+    growth_rate_list = property_obj.CapitalGrowthRates
+    property_value_list = property_obj.property_value_list
+    outstanding_list = property_obj.loan_amount_list
+    equity_list = property_obj.equity_list
+    zipped_lists = zip(
+        growth_rate_list, property_value_list, outstanding_list, equity_list
+    )
+    context = {
+        "property_obj": property_obj,
+        "images": images,
+        "zipped_lists": zipped_lists,
+    }
     return render(request, "users/propertypage.html", context=context)
 
 

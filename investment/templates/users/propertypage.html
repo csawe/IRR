@@ -23,11 +23,11 @@
                     </h5>
                     <h5 class="text-center">See  property details</h5>
                     <ul>
-                      <li>  <a href="" class="btn btn-dark">Results</a></li>
-                      <li> <a href="" class="btn btn-dark">Photograpgh</a></li>
-                      <li> <a href="" class="btn btn-dark">Value</a></li>
-                      <li> <a href="" class="btn btn-dark">Interest Bill</a></li>
-                      <li><a href="" class="btn btn-dark">Cash Flow</a></li>
+                      <li> <button class="btn btn-primary m-2" onclick="show_results()">Results</button> </li>
+                      <li> <button href="" class="btn btn-primary m-2">Photograpgh</button> </li>
+                      <li> <button class="btn  btn-primary m-2" onclick="show_value()">Value</button> </li>
+                      <li> <button class="btn btn-primary m-2">Interest Bill</button> </li>
+                      <li> <button class="btn btn-primary m-2">Cash Flow</button> </li>
                     </ul>
                     <br>
                     {% for i in images %}
@@ -45,7 +45,7 @@
                     </div>
                     {% endfor %}
                 </div>
-                <div class="col-8 mt-4">
+                <div class="col-8 mt-4" id="results_page" style="display:block;">
                     <table class="table">
                         <thead>
                         <tr>
@@ -248,9 +248,45 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="col-8 mt-4" id="value_page" style="display:none;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Growth Rate</th>
+                                <th scope="col">Property Value</th>
+                                <th scope="col">Outstanding</th>
+                                <th scope="col">Equity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for growth_rate, property_value, outstanding, equity in zipped_lists %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ growth_rate }}</td>
+                                <td>{{ property_value }}</td>
+                                <td>{{ outstanding}}</td>
+                                <td>{{ outstanding}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    function show_results(){
+        document.getElementById("results_page").style.display = "block";
+        document.getElementById("value_page").style.display = "none";
+    }
+    function show_value(){
+        document.getElementById("results_page").style.display = "none";
+        document.getElementById("value_page").style.display = "block";
+    }
+</script>
 
 {% endblock %}
