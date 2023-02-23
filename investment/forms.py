@@ -201,7 +201,7 @@ class MonthlyExpensesFormJson(forms.Form):
 
 
 MonthlyExpenseFormSet = forms.formset_factory(
-    MonthlyExpensesFormJson, extra=0
+    MonthlyExpensesFormJson, extra=1
 )  # Monthly Expenses
 
 
@@ -248,7 +248,7 @@ class TaxOptionsFormJson(forms.Form):
     tax_options_rate = forms.IntegerField()
 
 
-TaxOptionFormSet = forms.formset_factory(TaxOptionsFormJson, extra=0)
+TaxOptionFormSet = forms.formset_factory(TaxOptionsFormJson, extra=1)
 
 
 class AdditionalLoanPaymentsForm(forms.Form):
@@ -276,4 +276,5 @@ class RentalIncomeAmountForm(forms.Form):
 RentalIncomeFormSet = forms.formset_factory(
     RentalIncomeAmountForm, extra=0
 )  # Rental Income
+
 Model16Formset = formset_factory(ComparisonForm, extra=1)  # Compariosn

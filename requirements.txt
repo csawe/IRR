@@ -1,0 +1,17 @@
+django
+bootstrap4
+cloudinary
+dj-database-url
+psycopg2
+django-phonenumber-field
+phonenumbers
+django-forms-bootstrap
+django-bootstrap4
+numpy
+numpy-financial
+django-crispy-forms
+django-tailwind
+npm
+crispy-tailwind
+scipy
+

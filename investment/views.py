@@ -553,10 +553,14 @@ def view_one_property(request, id):
     zipped_lists = zip(
         growth_rate_list, property_value_list, outstanding_list, equity_list
     )
+    data_1 = list(property_value_list)
+    data_2 = list(outstanding_list)
     context = {
         "property_obj": property_obj,
         "images": images,
         "zipped_lists": zipped_lists,
+        'data_1': data_1,
+        'data_2' : data_2, 
     }
     return render(request, "users/propertypage.html", context=context)
 

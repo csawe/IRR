@@ -269,9 +269,43 @@
                                 <td>{{ outstanding}}</td>
                             </tr>
                             {% endfor %}
-                        </tbody>
+                        </tbody>  
                     </table>
+                    
+                    <canvas id="myChart"></canvas>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+                    <script>
+                        var ctx = document.getElementById('myChart').getContext('2d');
+                        var data_1 = {{ data_1 }};
+                        var data_2 = {{ data_2 }};
+                        var chart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5', 'Year 6', 'Year 7', 'Year 8', 'Year 9', 'Year 10', 'Year 11', 'Year 12', 'Year 13', 'Year 14', 'Year 15', 'Year 16', 'Year 17', 'Year 18', 'Year 19', 'Year 20', 'Year 21', 'Year 22', 'Year 23', 'Year 24', 'Year 25', 'Year 26', 'Year 27', 'Year 28', 'Year 29', 'Year 30'],
+                            datasets: [{
+                            label: 'Data 1',
+                            data: data_1,
+                            borderColor: 'red',
+                            fill: false
+                            }, {
+                            label: 'Data 2',
+                            data: data_2,
+                            borderColor: 'blue',
+                            fill: false
+                            }]
+                        },
+                        options: {
+                            // customize chart options as needed
+                        }
+                        });
+                    </script>
 
+                </div>
+                <div class="col-8 mt-4" id="value_page" style="display:none;">
+                    {% comment %} Interest bill goes here {% endcomment %}
+                </div>
+                <div class="col-8 mt-4" id="value_page" style="display:none;">
+                    {% comment %} Cash Flow goes here {% endcomment %}
                 </div>
             </div>
         </div>
